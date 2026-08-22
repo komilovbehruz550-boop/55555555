@@ -12,6 +12,7 @@
   "dependencies": {
     "@nestjs/common": "^10.4.4",
     "@nestjs/config": "^3.2.3",
+    "typescript": "^5.x.x",
     "@nestjs/core": "^10.4.4",
     "@nestjs/platform-express": "^10.4.4",
     "nestjs-telegraf": "^2.9.1",
