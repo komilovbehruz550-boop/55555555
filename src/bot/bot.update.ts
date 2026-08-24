@@ -1,5 +1,6 @@
 import { Update, Ctx, Start, Command, Action, On, InjectBot } from 'nestjs-telegraf';
 import { Context, Telegraf } from 'telegraf';
+import { ConfigService } from '@nestjs/config';
 import { StateService } from './state.service';
 import { Lang, Player, GameState } from '../game/game.types';
 import { t, cardLabel, colorLabel } from '../i18n/i18n';
@@ -40,7 +41,15 @@ export class BotUpdate {
   constructor(
     private readonly state: StateService,
     @InjectBot() private readonly bot: Telegraf<Context>,
-  ) {}
+    private readonly config: ConfigService,
+  ) {
+    // Lightweight usage tracking: every incoming update passes through here first.
+    this.bot.use(async (ctx, next) => {
+      if (ctx.from) this.state.recordUser(ctx.from.id);
+      if (ctx.chat && ctx.chat.type !== 'private') this.state.recordGroup(ctx.chat.id);
+      return next();
+    });
+  }
 
   // ---------- basic commands ----------
 
@@ -114,6 +123,43 @@ export class BotUpdate {
   async onHelp(@Ctx() ctx: Context) {
     const userId = ctx.from?.id ?? 0;
     await ctx.reply(t(this.state.getLang(userId), 'help_text'));
+  }
+
+  private isAdmin(userId: number): boolean {
+    const raw = this.config.get<string>('ADMIN_IDS') ?? '';
+    const ids = raw
+      .split(',')
+      .map((s) => s.trim())
+      .filter(Boolean)
+      .map(Number);
+    // If no admins are configured, /stats is open to everyone.
+    if (ids.length === 0) return true;
+    return ids.includes(userId);
+  }
+
+  @Command('stats')
+  async onStats(@Ctx() ctx: Context) {
+    const userId = ctx.from?.id;
+    if (!userId) return;
+    const lang = this.state.getLang(userId);
+
+    if (!this.isAdmin(userId)) {
+      await ctx.reply(t(lang, 'stats_admin_only'));
+      return;
+    }
+
+    const s = this.state.getStats();
+    await ctx.reply(
+      t(lang, 'stats_text', {
+        users: s.totalUsers,
+        groups: s.totalGroups,
+        lobbies: s.activeLobbies,
+        activeGames: s.activeGames,
+        playersInGames: s.playersInGames,
+        started: s.gamesStarted,
+        finished: s.gamesFinished,
+      }),
+    );
   }
 
   // ---------- lobby management ----------
@@ -308,6 +354,7 @@ export class BotUpdate {
 
     this.clearLobbyTimer(chatId);
     startGame(game);
+    this.state.incrementGamesStarted();
     const top = topCard(game);
     const first = currentPlayer(game);
     const lang = this.state.getLang(game.createdBy);
@@ -478,6 +525,7 @@ export class BotUpdate {
     await ctx.editMessageText(t(lang, 'you_played', { card: cardLabel(lang, card) }));
 
     if (result.gameWon) {
+      this.state.incrementGamesFinished();
       await this.sendGroupPhoto(chatId, WINNER_BANNER, t(lang, 'winner_msg', { name: player.name }));
       this.state.deleteGame(chatId);
       return;
@@ -517,6 +565,7 @@ export class BotUpdate {
     );
 
     if (result.gameWon) {
+      this.state.incrementGamesFinished();
       await this.sendGroupPhoto(chatId, WINNER_BANNER, t(lang, 'winner_msg', { name: player.name }));
       this.state.deleteGame(chatId);
       return;

@@ -4,7 +4,7 @@
   "description": "Telegram guruhida o'ynaydigan UNO boti (NestJS + Telegraf), 3 tilli: uz/ru/en",
   "main": "dist/main.js",
   "scripts": {
-    "build": "node node_modules/typescript/bin/tsc -p tsconfig.json",
+    "build": "tsc -p tsconfig.json",
     "start": "node dist/main.js",
     "start:dev": "ts-node-dev --respawn --transpile-only src/main.ts",
     "test:engine": "ts-node src/game/game.engine.spec.ts"
@@ -12,7 +12,6 @@
   "dependencies": {
     "@nestjs/common": "^10.4.4",
     "@nestjs/config": "^3.2.3",
-    "typescript": "^5.x.x",
     "@nestjs/core": "^10.4.4",
     "@nestjs/platform-express": "^10.4.4",
     "nestjs-telegraf": "^2.9.1",
@@ -24,6 +23,6 @@
     "@types/node": "^20.14.9",
     "ts-node": "^10.9.2",
     "ts-node-dev": "^2.0.0",
-    "typescript": "^5.x.x"
+    "typescript": "^5.5.4"
   }
 }

@@ -15,6 +15,14 @@ export class StateService {
   /** userId -> chatId of a lobby they tried to join before pressing /start in a private chat */
   private pendingJoins = new Map<number, number>();
 
+  // ---------- usage analytics ----------
+  /** every distinct user id that has ever interacted with the bot */
+  private allUsers = new Set<number>();
+  /** every distinct group chat id the bot has been used in */
+  private allGroups = new Set<number>();
+  private gamesStartedCount = 0;
+  private gamesFinishedCount = 0;
+
   getGame(chatId: number): GameState | undefined {
     return this.games.get(chatId);
   }
@@ -69,5 +77,40 @@ export class StateService {
 
   clearPendingJoin(userId: number): void {
     this.pendingJoins.delete(userId);
+  }
+
+  // ---------- usage analytics ----------
+
+  recordUser(userId: number): void {
+    this.allUsers.add(userId);
+  }
+
+  recordGroup(chatId: number): void {
+    this.allGroups.add(chatId);
+  }
+
+  incrementGamesStarted(): void {
+    this.gamesStartedCount += 1;
+  }
+
+  incrementGamesFinished(): void {
+    this.gamesFinishedCount += 1;
+  }
+
+  getStats() {
+    const activeGames = Array.from(this.games.values());
+    const lobbies = activeGames.filter((g) => g.status === 'lobby');
+    const playing = activeGames.filter((g) => g.status === 'playing');
+    const playersInGames = playing.reduce((sum, g) => sum + g.players.length, 0);
+
+    return {
+      totalUsers: this.allUsers.size,
+      totalGroups: this.allGroups.size,
+      activeLobbies: lobbies.length,
+      activeGames: playing.length,
+      playersInGames,
+      gamesStarted: this.gamesStartedCount,
+      gamesFinished: this.gamesFinishedCount,
+    };
   }
 }

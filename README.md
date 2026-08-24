@@ -74,7 +74,26 @@ o'tkazilgan — 2 dan 10 tagacha o'yinchi bilan, hech qanday xatosiz (`npm run t
 | `/cancel` | O'yin/lobbini bekor qilish (faqat yaratgan odam) |
 | `/status` | Joriy holatni ko'rish |
 | `/lang` | Tilni o'zgartirish |
+| `/stats` | Foydalanish statistikasi (jami foydalanuvchilar, guruhlar, faol/tugagan o'yinlar) |
 | `/help` | Yordam |
+
+### Statistikani ko'rish (`/stats`)
+
+Bot qancha odam va guruh tomonidan ishlatilayotganini `/stats` buyrug'i orqali istalgan
+chatda (guruhda ham, shaxsiy chatda ham) ko'rish mumkin. U quyidagilarni ko'rsatadi:
+
+- Jami (unikal) foydalanuvchilar va guruhlar soni
+- Hozir kutayotgan lobbilar va davom etayotgan o'yinlar soni
+- Jami boshlangan va tugagan o'yinlar soni
+
+Standart holatda `/stats` **hammaga ochiq**. Agar uni faqat o'zingiz (yoki tanlangan
+adminlar) ko'ra olishini xohlasangiz, `.env` fayliga Telegram user ID'laringizni yozing:
+
+```
+ADMIN_IDS=123456789,987654321
+```
+
+(O'z Telegram ID'ingizni bilish uchun @userinfobot kabi botlardan foydalanishingiz mumkin.)
 
 ## Loyiha tuzilishi
 
@@ -98,8 +117,9 @@ src/
 ## Eslatmalar / cheklovlar
 
 - Holat **xotirada** saqlanadi (baza yo'q) — bot qayta ishga tushsa, davom etayotgan
-  o'yinlar yo'qoladi. Agar kerak bo'lsa, keyinroq SQLite/Redis qo'shib, holatni
-  disk/bazaga saqlash mumkin.
+  o'yinlar yo'qoladi va **statistika ("/stats") ham nolga tushadi** (foydalanuvchi/guruh
+  hisoblari qayta ishga tushirilgandan beri sanaladi). Agar kerak bo'lsa, keyinroq
+  SQLite/Redis qo'shib, holat va statistikani disk/bazaga saqlash mumkin.
 - Bir vaqtning o'zida bir guruhda faqat bitta o'yin bo'lishi mumkin.
 - Bot ishlashi uchun serveringiz (yoki kompyuteringiz) doimiy internetga ulangan va
   `npm start` jarayoni ishlab turishi kerak (masalan VPS, yoki `pm2` bilan fon rejimida).

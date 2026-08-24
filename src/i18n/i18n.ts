@@ -64,9 +64,12 @@ const uz: Dict = {
   card_reverse: 'Teskari',
   card_draw2: '+2',
   help_text:
-    "UNO Bot buyruqlari:\n/uno — yangi o'yin boshlash (guruhda)\n/join — o'yinga qo'shilish\n/startgame — o'yinni boshlash (yaratgan odam)\n/cancel — o'yinni bekor qilish\n/status — joriy holatni ko'rish\n/lang — tilni o'zgartirish\n/help — yordam",
+    "UNO Bot buyruqlari:\n/uno — yangi o'yin boshlash (guruhda)\n/join — o'yinga qo'shilish\n/startgame — o'yinni boshlash (yaratgan odam)\n/cancel — o'yinni bekor qilish\n/status — joriy holatni ko'rish\n/lang — tilni o'zgartirish\n/stats — foydalanish statistikasi\n/help — yordam",
   status_lobby: "Lobbi ochiq. O'yinchilar: {list}",
   status_playing: "O'yin davom etyapti. Navbat: {name}. Qolgan kartalar soni: {counts}",
+  stats_admin_only: "Bu buyruq faqat bot administratori uchun.",
+  stats_text:
+    "📊 Bot statistikasi:\n\n👤 Jami foydalanuvchilar: {users}\n👥 Jami guruhlar: {groups}\n\n🕓 Hozir kutayotgan lobbilar: {lobbies}\n🎮 Hozir davom etayotgan o'yinlar: {activeGames} ({playersInGames} o'yinchi)\n\n▶️ Jami boshlangan o'yinlar: {started}\n🏆 Jami tugagan o'yinlar: {finished}",
 };
 
 const ru: Dict = {
@@ -125,9 +128,12 @@ const ru: Dict = {
   card_reverse: 'Реверс',
   card_draw2: '+2',
   help_text:
-    'Команды UNO бота:\n/uno — начать новую игру (в группе)\n/join — присоединиться к игре\n/startgame — начать игру (создатель)\n/cancel — отменить игру\n/status — посмотреть текущее состояние\n/lang — сменить язык\n/help — помощь',
+    'Команды UNO бота:\n/uno — начать новую игру (в группе)\n/join — присоединиться к игре\n/startgame — начать игру (создатель)\n/cancel — отменить игру\n/status — посмотреть текущее состояние\n/lang — сменить язык\n/stats — статистика использования\n/help — помощь',
   status_lobby: 'Лобби открыто. Игроки: {list}',
   status_playing: 'Игра идёт. Ход: {name}. Карт у игроков: {counts}',
+  stats_admin_only: 'Эта команда доступна только администратору бота.',
+  stats_text:
+    '📊 Статистика бота:\n\n👤 Всего пользователей: {users}\n👥 Всего групп: {groups}\n\n🕓 Лобби сейчас ожидают: {lobbies}\n🎮 Игр сейчас идёт: {activeGames} ({playersInGames} игроков)\n\n▶️ Всего начато игр: {started}\n🏆 Всего завершено игр: {finished}',
 };
 
 const en: Dict = {
@@ -186,9 +192,12 @@ const en: Dict = {
   card_reverse: 'Reverse',
   card_draw2: '+2',
   help_text:
-    'UNO bot commands:\n/uno — start a new game (in a group)\n/join — join the game\n/startgame — start the game (creator only)\n/cancel — cancel the game\n/status — view current status\n/lang — change language\n/help — help',
+    'UNO bot commands:\n/uno — start a new game (in a group)\n/join — join the game\n/startgame — start the game (creator only)\n/cancel — cancel the game\n/status — view current status\n/lang — change language\n/stats — usage statistics\n/help — help',
   status_lobby: 'Lobby is open. Players: {list}',
   status_playing: 'Game in progress. Turn: {name}. Cards left per player: {counts}',
+  stats_admin_only: "This command is only available to the bot's admin.",
+  stats_text:
+    "📊 Bot statistics:\n\n👤 Total users: {users}\n👥 Total groups: {groups}\n\n🕓 Lobbies waiting right now: {lobbies}\n🎮 Games in progress: {activeGames} ({playersInGames} players)\n\n▶️ Total games started: {started}\n🏆 Total games finished: {finished}",
 };
 
 const DICTS: Record<Lang, Dict> = { uz, ru, en };
